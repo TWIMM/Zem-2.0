@@ -55,6 +55,5 @@ jobs:
         with:
           files: app-release/*.apk
           tag_name: ${{ steps.create_tag.outputs.tag }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.ZEM_BUILD }}  # Use the PAT instead of default GITHUB_TOKEN
         if: success()  # Only create a release if the build job succeeds
