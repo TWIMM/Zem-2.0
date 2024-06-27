@@ -3,10 +3,10 @@ name: Build APK
 on:
   push:
     branches:
-      - main  # Adjust branch name if needed
+      - master  # Adjust branch name if needed
   pull_request:
     branches:
-      - main  # Adjust branch name if needed
+      - master  # Adjust branch name if needed
 
 jobs:
   build:
