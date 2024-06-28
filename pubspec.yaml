@@ -49,6 +49,7 @@ dependencies:
   contacts_service: ^0.6.3
   permission_handler: ^11.0.1
   image_picker: ^1.0.7
+  google_maps_flutter: ^2.5.3
  
 
 dev_dependencies:

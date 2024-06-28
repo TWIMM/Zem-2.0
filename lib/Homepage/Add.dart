@@ -13,6 +13,10 @@ import 'dart:typed_data';
 import '../Services/Validator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
+import 'package:agri_market/Commons/dropConditions.dart';
+import 'package:agri_market/Commons/dropSeats.dart';
+import 'package:agri_market/Commons/dropGmaps.dart';
+
 
 Validator validator = Validator();
 
@@ -29,6 +33,11 @@ class _MessagesState extends State<Add> {
   TextEditingController titleController = TextEditingController();
   TextEditingController countryController = TextEditingController();
   TextEditingController priceController = TextEditingController();
+  TextEditingController kilometrageController = TextEditingController();
+  TextEditingController marqueController = TextEditingController();
+  TextEditingController seatsController = TextEditingController(); 
+  TextEditingController conditionController = TextEditingController(); // New controller for état
+
   List<MemoryImage?> selectedImages = List.generate(4, (index) => null);
   var authToken;
   var currentIndexProvider;
@@ -159,8 +168,8 @@ class _MessagesState extends State<Add> {
                   ],
                 ),
                 SizedBox(height: 15),
-                DropdownMenuExample(
-                  onCountrySelected: (value) {
+                dropGmaps(
+                  onActivitySelected: (value) {
                       countryController.text = value ?? "";
                   },
                 ),
@@ -173,6 +182,45 @@ class _MessagesState extends State<Add> {
                   },
                 ), */
                 SizedBox(height: 6),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    StyledText(
+                      text: "Nombre de place du véhicule",
+                      fontName: "Open Sans",
+                      fontSize: 13,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.black,
+                      textAlign: TextAlign.left,
+                    ),
+                  ],
+                ),
+                SizedBox(height: 15), 
+                dropSeats(
+                   onActivitySelected: (value) {
+                      seatsController.text = value ?? "";
+                  },
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    StyledText(
+                      text: "Condition du véhicule",
+                      fontName: "Open Sans",
+                      fontSize: 13,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.black,
+                      textAlign: TextAlign.left,
+                    ),
+                  ],
+                ),
+                SizedBox(height: 15), 
+                dropCondition(
+                   onActivitySelected: (value) {
+                      conditionController.text = value ?? "";
+                  },
+                ), 
+                SizedBox(height: 15),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -195,6 +243,58 @@ class _MessagesState extends State<Add> {
                     color: Colors.black,
                   ),
                   labelText: "0 USD",
+                  isError: isErrorPrice,
+                  border: InputBorder.none,
+                ),
+                SizedBox(height: 15),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    StyledText(
+                      text: "Marque",
+                      fontName: "Open Sans",
+                      fontSize: 13,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.black,
+                      textAlign: TextAlign.left,
+                    ),
+                  ],
+                ),
+                SizedBox(height: 15),
+                MyCustomInputField(
+                  controller: marqueController,
+                  labelStyle: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 15,
+                    color: Colors.black,
+                  ),
+                  labelText: "Marque",
+                  isError: isErrorPrice,
+                  border: InputBorder.none,
+                ),
+                SizedBox(height: 15),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    StyledText(
+                      text: "Kilométrage",
+                      fontName: "Open Sans",
+                      fontSize: 13,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.black,
+                      textAlign: TextAlign.left,
+                    ),
+                  ],
+                ),
+                SizedBox(height: 15),
+                MyCustomInputField(
+                  controller: kilometrageController,
+                  labelStyle: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 15,
+                    color: Colors.black,
+                  ),
+                  labelText: "KmH",
                   isError: isErrorPrice,
                   border: InputBorder.none,
                 ),
