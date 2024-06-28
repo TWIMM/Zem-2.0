@@ -90,17 +90,17 @@ class _InscriptionPage extends State<InscriptionPage> {
                                 color: Colors.white,
                               ),
                             )),
-                        /* Expanded(
+                        Expanded(
                           child: Center(
                             child: Transform.scale(
-                              scale: 1.2,
+                              scale: 1.5,
                               child: Image.asset(
                                 'assets/images/agrimarket.png',
                                 height: 50,
                               ),
                             ),
                           ),
-                        ), */
+                        ),
                         GestureDetector(
                             onTap: () {
                               // Handle the icon's tap action here

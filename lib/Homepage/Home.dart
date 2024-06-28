@@ -359,7 +359,7 @@ yesterdayOffer = [
           Row(
             children: [
               Image.asset(
-                'assets/icons/pp.png',
+               'assets/images/agrimarket.png',
                 width: 60, // Set the desired width
                 height: 60, // Set the desired height
               ),

@@ -116,17 +116,17 @@ class _frontEndState extends State<frontEnd> {
                                 color: Colors.white,
                               ),
                             )),
-                        /* Expanded(
+                        Expanded(
                           child: Center(
                             child: Transform.scale(
-                              scale: 1.2,
+                              scale: 1.5,
                               child: Image.asset(
                                 'assets/images/agrimarket.png',
                                 height: 50,
                               ),
                             ),
                           ),
-                        ), */
+                        ),
                         GestureDetector(
                             onTap: () {
                               // Handle the icon's tap action here
@@ -195,7 +195,8 @@ class _frontEndState extends State<frontEnd> {
                                   margin:
                                       EdgeInsets.only(top: 20), // Adjust margin
                                   decoration: BoxDecoration(
-                                    color:  Color.fromARGB(255, 0, 39, 100), // Use the provided color code
+                                    color: Color.fromARGB(255, 0, 39,
+                                        100), // Use the provided color code
                                     borderRadius: BorderRadius.circular(12.0),
                                   ),
                                   child: Center(

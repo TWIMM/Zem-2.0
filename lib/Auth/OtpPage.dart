@@ -102,17 +102,17 @@ class _frontEndState extends State<FrontEnd> {
                                 color: Colors.white,
                               ),
                             )),
-                        /* Expanded(
+                        Expanded(
                           child: Center(
                             child: Transform.scale(
-                              scale: 1.2,
+                              scale: 1.5,
                               child: Image.asset(
                                 'assets/images/agrimarket.png',
                                 height: 50,
                               ),
                             ),
                           ),
-                        ), */
+                        ),
                         GestureDetector(
                             onTap: () {
                               Navigator.push(

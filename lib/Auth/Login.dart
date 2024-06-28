@@ -101,17 +101,17 @@ class _LoginPageState extends State<LoginPage> {
                       crossAxisAlignment:
                           CrossAxisAlignment.center, // Center vertically
                       children: <Widget>[
-                        /* Expanded(
+                        Expanded(
                           child: Center(
                             child: Transform.scale(
-                              scale: 1.2,
+                              scale: 1.5,
                               child: Image.asset(
                                 'assets/images/agrimarket.png',
                                 height: 50,
                               ),
                             ),
                           ),
-                        ), */
+                        ),
                       ],
                     ),
                     Container(
@@ -222,7 +222,7 @@ class _LoginPageState extends State<LoginPage> {
                                   height: 50,
                                   decoration: BoxDecoration(
                                     color: Color.fromARGB(255, 0, 39, 100),
-                                       // Use the provided color code
+                                    // Use the provided color code
                                     borderRadius: BorderRadius.circular(12.0),
                                   ),
                                   child: Center(

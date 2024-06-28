@@ -58,7 +58,7 @@ class _InscriptionPage2 extends State<InscriptionPage2> {
   bool isRadio1Pressed = false;
   bool isRadio2Pressed = false;
   bool isCheckedMock = false;
-  bool isAccountError = false ; 
+  bool isAccountError = false;
 
   Widget customCheckbox() {
     return InkWell(
@@ -137,17 +137,17 @@ class _InscriptionPage2 extends State<InscriptionPage2> {
                                 color: Colors.white,
                               ),
                             )),
-                        /* Expanded(
+                        Expanded(
                           child: Center(
                             child: Transform.scale(
-                              scale: 1.2,
+                              scale: 1.5,
                               child: Image.asset(
                                 'assets/images/agrimarket.png',
                                 height: 50,
                               ),
                             ),
                           ),
-                        ), */
+                        ),
                         GestureDetector(
                             onTap: () {
                               // Handle the icon's tap action here
@@ -410,7 +410,8 @@ class _InscriptionPage2 extends State<InscriptionPage2> {
                                 margin:
                                     EdgeInsets.only(top: 20), // Adjust margin
                                 decoration: BoxDecoration(
-                                  color:  Color.fromARGB(255, 0, 39, 100), // Use the provided color code
+                                  color: Color.fromARGB(255, 0, 39,
+                                      100), // Use the provided color code
                                   borderRadius: BorderRadius.circular(12.0),
                                 ),
                                 child: Center(

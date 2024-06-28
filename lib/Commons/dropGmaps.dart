@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:location/location.dart';
 
 class dropGmaps extends StatefulWidget {
   final void Function(String?) onActivitySelected;
@@ -15,13 +16,51 @@ class _DropGmapsState extends State<dropGmaps> {
   TextEditingController activityController = TextEditingController();
   String? activityName = "";
 
+
+  @override
+  void initState() {
+    super.initState();
+    _getCurrentLocation();
+  }
+
+  void _getCurrentLocation() async {
+    try {
+      LocationData locationData = await location.getLocation();
+      setState(() {
+        currentLocationData = locationData;
+      });
+      _updateMarkers();
+    } catch (e) {
+      print("Error getting location: $e");
+    }
+  }
+
+  void _updateMarkers() {
+    if (currentLocationData != null) {
+      Marker marker = Marker(
+        markerId: MarkerId('currentLocation'),
+        position: LatLng(
+            currentLocationData!.latitude!, currentLocationData!.longitude!),
+        infoWindow: InfoWindow(title: 'Current Location'),
+      );
+      setState(() {
+        markers.clear();
+        markers.add(marker);
+      });
+    }
+  }
+
+
   List<String> activities = [
     '7 places',
     '5 places',
     '4 places',
     '2 places',
   ];
-
+ GoogleMapController? mapController;
+  LocationData? currentLocationData;
+  Location location = Location();
+  Set<Marker> markers = {};
   @override
   Widget build(BuildContext context) {
     double deviceWidth = MediaQuery.of(context).size.width;
@@ -41,20 +80,20 @@ class _DropGmapsState extends State<dropGmaps> {
             width: (deviceWidth - 42) * 0.3,
             height: 50,
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.only(
+              borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(15.0),
                 bottomLeft: Radius.circular(15.0),
               ),
               border: Border.all(
                 color: Colors.white,
               ),
-              color: Color.fromARGB(255, 0, 39, 100),
+              color: const Color.fromARGB(255, 0, 39, 100),
             ),
             child: TextButton(
               onPressed: () {
                 _showActivityPickerBottomSheet(context);
               },
-              child: Text(
+              child: const Text(
                 'Open Maps',
                 style: TextStyle(
                   fontFamily: 'Open Sans',
@@ -69,7 +108,7 @@ class _DropGmapsState extends State<dropGmaps> {
             width: (deviceWidth - 42) * 0.7,
             child: Text(
               activityController.text,
-              style: TextStyle(
+              style: const TextStyle(
                 fontFamily: 'Open Sans',
                 fontSize: 15,
                 fontWeight: FontWeight.w600,
@@ -86,31 +125,30 @@ class _DropGmapsState extends State<dropGmaps> {
   void _showActivityPickerBottomSheet(BuildContext context) {
     showModalBottomSheet(
       context: context,
-      shape: RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(15.0),
           topRight: Radius.circular(15.0),
         ),
       ),
       builder: (BuildContext context) {
-        return Container(
+        return SizedBox(
           height: MediaQuery.of(context).size.height * 0.75,
-          child: GoogleMap(
-            initialCameraPosition: CameraPosition(
-              target: LatLng(
-                  37.7749, -122.4194), // Initial position (San Francisco)
-              zoom: 12.0,
+          child: Padding(
+            padding: const EdgeInsets.all(8.0), // Padding around the map
+            child:  GoogleMap(
+                initialCameraPosition: CameraPosition(
+                  target: LatLng(
+                    currentLocationData?.latitude ?? 0.0,
+                    currentLocationData?.longitude ?? 0.0,
+                  ),
+                  zoom: 15.0,
+                ),
+                markers: markers,
+                onMapCreated: (GoogleMapController controller) {
+                  mapController = controller;
+                },
             ),
-            onMapCreated: (GoogleMapController controller) {
-              // You can manipulate the map controller here
-            },
-            markers: {
-              Marker(
-                markerId: MarkerId('marker_1'),
-                position: LatLng(37.7749, -122.4194),
-                infoWindow: InfoWindow(title: 'San Francisco'),
-              ),
-            },
           ),
         );
       },
@@ -131,8 +169,8 @@ class ActivityPickerBottomSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(16),
-      child: SingleChildScrollView(
+      padding: const EdgeInsets.all(16),
+      child: const SingleChildScrollView(
         // Use SingleChildScrollView to make the content scrollable
         child: Column(
           mainAxisSize: MainAxisSize.min,
