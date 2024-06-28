@@ -15,7 +15,7 @@ import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:agri_market/Commons/dropConditions.dart';
 import 'package:agri_market/Commons/dropSeats.dart';
-import 'package:agri_market/Commons/DropGmaps.dart';
+import 'package:agri_market/Commons/dropGmaps.dart';
 
 
 Validator validator = Validator();
@@ -168,7 +168,7 @@ class _MessagesState extends State<Add> {
                   ],
                 ),
                 SizedBox(height: 15),
-                DropGmaps(
+                dropGmaps(
                   onActivitySelected: (value) {
                       countryController.text = value ?? "";
                   },

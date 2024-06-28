@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-class DropGmaps extends StatefulWidget {
+class dropGmaps extends StatefulWidget {
   final void Function(String?) onActivitySelected;
 
-  const DropGmaps({Key? key, required this.onActivitySelected})
+  const dropGmaps({Key? key, required this.onActivitySelected})
       : super(key: key);
 
   @override
-  State<DropGmaps> createState() => _DropGmapsState();
+  State<dropGmaps> createState() => _DropGmapsState();
 }
 
-class _DropGmapsState extends State<DropGmaps> {
+class _DropGmapsState extends State<dropGmaps> {
   TextEditingController activityController = TextEditingController();
   String? activityName = "";
 
