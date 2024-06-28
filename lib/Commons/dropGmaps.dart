@@ -1,20 +1,26 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-class dropGmaps extends StatefulWidget {
+class DropGmaps extends StatefulWidget {
   final void Function(String?) onActivitySelected;
 
-  const dropGmaps({Key? key, required this.onActivitySelected})
+  const DropGmaps({Key? key, required this.onActivitySelected})
       : super(key: key);
 
   @override
-  State<dropGmaps> createState() => _ActivityPickerExampleState();
+  State<DropGmaps> createState() => _DropGmapsState();
 }
 
-class _ActivityPickerExampleState extends State<dropGmaps> {
+class _DropGmapsState extends State<DropGmaps> {
   TextEditingController activityController = TextEditingController();
   String? activityName = "";
+
+  List<String> activities = [
+    '7 places',
+    '5 places',
+    '4 places',
+    '2 places',
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -91,7 +97,8 @@ class _ActivityPickerExampleState extends State<dropGmaps> {
           height: MediaQuery.of(context).size.height * 0.75,
           child: GoogleMap(
             initialCameraPosition: CameraPosition(
-              target: LatLng(37.7749, -122.4194), // Initial position (San Francisco)
+              target: LatLng(
+                  37.7749, -122.4194), // Initial position (San Francisco)
               zoom: 12.0,
             ),
             onMapCreated: (GoogleMapController controller) {
@@ -107,6 +114,33 @@ class _ActivityPickerExampleState extends State<dropGmaps> {
           ),
         );
       },
+    );
+  }
+}
+
+class ActivityPickerBottomSheet extends StatelessWidget {
+  final List<String> activities;
+  final void Function(String) onActivitySelected;
+
+  const ActivityPickerBottomSheet({
+    Key? key,
+    required this.activities,
+    required this.onActivitySelected,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.all(16),
+      child: SingleChildScrollView(
+        // Use SingleChildScrollView to make the content scrollable
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            // Add widgets here as needed for the bottom sheet content
+          ],
+        ),
+      ),
     );
   }
 }

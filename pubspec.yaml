@@ -50,6 +50,7 @@ dependencies:
   permission_handler: ^11.0.1
   image_picker: ^1.0.7
   google_maps_flutter: ^2.5.3
+  webview_flutter: ^4.5.0
  
 
 dev_dependencies:
