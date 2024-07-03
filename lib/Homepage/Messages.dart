@@ -45,16 +45,16 @@ class _MessagesState extends State<Messages> {
           children: [
             SizedBox(height: 20),
             CustomSearch(
-              controller: searchController,
-              labelText: "Rechercher",
-              prefixIcon: Icon(
-                Icons.search,
-                color: Color(0xFFFFB405),
-              ),
-              fillColor: Color.fromARGB(255, 234, 234, 234),
-              width: deviceWidth * 0.9,
-              height: 51,
-            ),
+                controller: searchController,
+                labelText: "Rechercher",
+                prefixIcon: Icon(
+                  Icons.search,
+                  color: Color(0xFFFFB405),
+                ),
+                fillColor: Color.fromARGB(255, 234, 234, 234),
+                width: deviceWidth * 0.9,
+                height: 51,
+                onChanged: (ValueKey) {}),
             SizedBox(height: 20),
             Container(
               alignment: Alignment.center,

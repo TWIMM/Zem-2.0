@@ -140,8 +140,8 @@ class CustomSearch extends StatefulWidget {
   bool isError;
   final List<DropdownMenuItem<String>>? dropdownItems;
   final String? dropdownValue;
-  final Function(String)? onChanged;
   final Function(String?)? dropdownOnChanged;
+  final Function(String)? onChanged; // Callback for text changes
 
   CustomSearch({
     Key? key,
@@ -166,7 +166,7 @@ class CustomSearch extends StatefulWidget {
     this.dropdownItems,
     this.dropdownValue,
     this.dropdownOnChanged,
-    this.onChanged,
+    required this.onChanged,
     this.isError = false,
   }) : super(key: key);
 
@@ -205,7 +205,17 @@ class _CustomInputFieldState extends State<CustomSearch> {
             ),
           TextFormField(
             controller: widget.controller,
-            onChanged: widget.onChanged!(widget.controller.text),
+            onChanged: (text) {
+              if (widget.validator != null) {
+                setState(() {
+                  widget.isError = widget.validator!(text) != null;
+                });
+              }
+
+              if (widget.onChanged != null) {
+                widget.onChanged!(text); // Invoke callback for text changes
+              }
+            },
 
             enabled: widget.enabled,
             style: widget.textStyle ?? TextStyle(color: Colors.black),

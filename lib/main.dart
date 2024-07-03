@@ -84,8 +84,8 @@ class _LandingPageState extends State<LandingPage> with WidgetsBindingObserver {
                     effects: [const ShakeEffect()],
                     child: Image.asset(
                       'assets/images/agrimarket.png',
-                      width: 100,
-                      height: 100,
+                      width: 200,
+                      height: 200,
                     ),
                   ),
 

@@ -47,7 +47,7 @@ class _MyAppState extends State<Displayer> {
             _buildSearchBar(),
             const SizedBox(height: 15),
             Visibility(
-                visible: showCurrentPositionButton,
+                visible: searchController.text.isNotEmpty ? false : true,
                 child: GestureDetector(
                   onTap: () {
                     final snackBar = SnackBar(
@@ -96,7 +96,7 @@ class _MyAppState extends State<Displayer> {
                   ),
                 )),
             Visibility(
-              visible: searchController.text.isNotEmpty,
+              visible: searchController.text.isNotEmpty ? true : false,
               child: Expanded(
                 child: ListView.builder(
                   itemCount: 5,

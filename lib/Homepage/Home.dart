@@ -283,6 +283,7 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
       fillColor: const Color.fromARGB(255, 234, 234, 234),
       width: MediaQuery.of(context).size.width * 0.9,
       height: 51,
+      onChanged: (ValueKey){}
     );
   }
 
