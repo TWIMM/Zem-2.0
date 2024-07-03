@@ -1,3 +1,4 @@
+import 'package:agri_market/Homepage/google_maps_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:agri_market/Commons/BottomNavBar.dart';
@@ -9,6 +10,7 @@ import 'package:agri_market/Commons/places.dart' as places;
 import 'package:location/location.dart';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import '../Commons/AuthInputModel.dart';
+import 'package:agri_market/Utils/UtilsClass.dart';
 
 void main() => runApp(const Displayer());
 
@@ -65,6 +67,19 @@ class _MyAppState extends State<Displayer> {
                     ScaffoldMessenger.of(context)
                       ..hideCurrentSnackBar()
                       ..showSnackBar(snackBar);
+
+                    UtilsClass.determinePosition().then((value) {
+                      print('Location  : ${value.toString()}');
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => GMapsApp(
+                                    defaultLong: value.longitude,
+                                    defaultLat: value.latitude,
+                                  )));
+                    }).onError((error, StackTrace) {
+                      print('Location ERROR : ${error.toString()}');
+                    });
                   },
                   child: Container(
                     width: 200,
@@ -77,7 +92,7 @@ class _MyAppState extends State<Displayer> {
                       child: Row(
                         children: [
                           Icon(
-                            Icons.add_location_rounded,
+                            Icons.my_location,
                             size: 30.0,
                             color: Colors.white,
                           ),
@@ -109,6 +124,7 @@ class _MyAppState extends State<Displayer> {
                 ),
               ),
             ),
+            //  SizedBox(height: 500, child: GMapsApp())
           ],
         ),
       ),

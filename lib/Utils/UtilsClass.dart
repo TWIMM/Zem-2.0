@@ -19,9 +19,10 @@ class UtilsClass {
   static Future<Position> determinePosition() async {
     bool serviceEnabled;
     LocationPermission permission;
+    final GeolocatorPlatform geolocatorPlatform = GeolocatorPlatform.instance;
 
     // Test if location services are enabled.
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    serviceEnabled = await geolocatorPlatform.isLocationServiceEnabled();
     if (!serviceEnabled) {
       // Location services are not enabled don't continue
       // accessing the position and request users of the
@@ -29,9 +30,9 @@ class UtilsClass {
       return Future.error('Location services are disabled.');
     }
 
-    permission = await Geolocator.checkPermission();
+    permission = await geolocatorPlatform.checkPermission();
     if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
+      permission = await geolocatorPlatform.requestPermission();
       if (permission == LocationPermission.denied) {
         // Permissions are denied, next time you could try
         // requesting permissions again (this is also where
@@ -50,7 +51,7 @@ class UtilsClass {
 
     // When we reach here, permissions are granted and we can
     // continue accessing the position of the device.
-    return await Geolocator.getCurrentPosition();
+    return await geolocatorPlatform.getCurrentPosition();
   }
 
   static void showActivityPickerBottomSheet(
