@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import '../Commons/AuthInputModel.dart';
 import 'package:agri_market/Utils/MyIcons.dart';
@@ -11,6 +12,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:contacts_service/contacts_service.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:agri_market/Utils/UtilsClass.dart';
 
 final OfferService offerService = OfferService();
 
@@ -30,6 +32,8 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
   TextEditingController searchController = TextEditingController();
   String selectedCategory = '';
   GlobalKey _firstContainerKey = GlobalKey();
+  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
   double textWidth = 0;
   final Map<int, GlobalKey> containerKeys = {};
   // final Map<int, double> categoryWidths = {};
@@ -85,82 +89,102 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
   Future<void> _loadAuthToken() async {
     authToken = await currentIndexProvider.getAccountDetail('authToken');
 
-    var response = await offerService.getAllOffers(authToken);
+    // var response = await offerService.getAllOffers(authToken);
 
-    var categories = await offerService.getCategories(authToken);
+    //  var categories = await offerService.getCategories(authToken);
 
-    var cat = categories['message']['categories']['data']['category'];
-    List<String> mysubcategories = cat.cast<String>();
+    //var cat = categories['message']['categories']['data']['category'];
+    // List<String> mysubcategories = cat.cast<String>();
 
-    categorY = mysubcategories;
+    categorY = ["VIP", "Moyen"];
 
-    print("categorY $categorY");
-    var responseExploited = response['message']['data']['data'];
-      allOffers =allOffers = [
-  {
-    'id': 1,
-    'name': 'Honda WR-V',
-    'description': "Modèle : Toyota Prius V\nAnnée : 2023\nKilométrage : 25,000 km\n\nDescription :\nLa Toyota Prius V est une voiture hybride spacieuse et économique, idéale pour les trajets urbains et les longues distances. Avec son design moderne et ses caractéristiques avancées en matière de sécurité, la Prius V offre une conduite confortable et écologique. Elle est équipée d'une technologie de pointe pour réduire la consommation de carburant et minimiser les émissions, contribuant ainsi à un environnement plus propre.",
-    'images': ['https://imgd-ct.aeplcdn.com/664x374/n/cw/ec/134205/new-wr-v-right-front-three-quarter.jpeg?isig=0&q=80']
-  },
-  {
-    'id': 2,
-    'name': 'Honda CVr Indonesia',
-    'description': 'Description de l\'offre 2 pour Honda CVr Indonesia',
-    'images': ['https://paultan.org/image/2023/07/2023_Honda_WRV_V_Launch_Malaysia_Ext-2-BM-850x567.jpg']
-  },
-  // Add more offers as needed
-];
+    // print("categorY $categorY");
+    //  var responseExploited = response['message']['data']['data'];
+    allOffers = allOffers = [
+      {
+        'id': 1,
+        'name': 'Honda WR-V',
+        'description':
+            "Modèle : Toyota Prius V\nAnnée : 2023\nKilométrage : 25,000 km\n\nDescription :\nLa Toyota Prius V est une voiture hybride spacieuse et économique, idéale pour les trajets urbains et les longues distances. Avec son design moderne et ses caractéristiques avancées en matière de sécurité, la Prius V offre une conduite confortable et écologique. Elle est équipée d'une technologie de pointe pour réduire la consommation de carburant et minimiser les émissions, contribuant ainsi à un environnement plus propre.",
+        'images': [
+          'https://imgd-ct.aeplcdn.com/664x374/n/cw/ec/134205/new-wr-v-right-front-three-quarter.jpeg?isig=0&q=80'
+        ]
+      },
+      {
+        'id': 2,
+        'name': 'Honda CVr Indonesia',
+        'description': 'Description de l\'offre 2 pour Honda CVr Indonesia',
+        'images': [
+          'https://paultan.org/image/2023/07/2023_Honda_WRV_V_Launch_Malaysia_Ext-2-BM-850x567.jpg'
+        ]
+      },
+      // Add more offers as needed
+    ];
 
-recentOffers = [
-  {
-    'id': 1,
-    'name': 'Honda WR-V',
-    'description': 'Description de l\'offre récente pour Honda WR-V',
-    'images': ['https://imgd-ct.aeplcdn.com/664x374/n/cw/ec/134205/new-wr-v-right-front-three-quarter.jpeg?isig=0&q=80']
-  },
-  {
-    'id': 2,
-    'name': 'Honda CVr Indonesia',
-    'description': 'Description de l\'offre récente pour Honda CVr Indonesia',
-    'images': ['https://paultan.org/image/2023/07/2023_Honda_WRV_V_Launch_Malaysia_Ext-2-BM-850x567.jpg']
-  },
-  // Add more recent offers as needed
-];
+    recentOffers = [
+      {
+        'id': 1,
+        'name': 'Honda WR-V',
+        'description': 'Description de l\'offre récente pour Honda WR-V',
+        'images': [
+          'https://imgd-ct.aeplcdn.com/664x374/n/cw/ec/134205/new-wr-v-right-front-three-quarter.jpeg?isig=0&q=80'
+        ]
+      },
+      {
+        'id': 2,
+        'name': 'Honda CVr Indonesia',
+        'description':
+            'Description de l\'offre récente pour Honda CVr Indonesia',
+        'images': [
+          'https://paultan.org/image/2023/07/2023_Honda_WRV_V_Launch_Malaysia_Ext-2-BM-850x567.jpg'
+        ]
+      },
+      // Add more recent offers as needed
+    ];
 
-sponsoredOffer = [
-  {
-    'id': 1,
-    'name': 'Honda WR-V',
-    'description': 'Description de l\'offre sponsorisée pour Honda WR-V',
-    'images': ['https://imgd-ct.aeplcdn.com/664x374/n/cw/ec/134205/new-wr-v-right-front-three-quarter.jpeg?isig=0&q=80']
-  },
-  {
-    'id': 2,
-    'name': 'Honda CVr Indonesia',
-    'description': 'Description de l\'offre sponsorisée pour Honda CVr Indonesia',
-    'images': ['https://paultan.org/image/2023/07/2023_Honda_WRV_V_Launch_Malaysia_Ext-2-BM-850x567.jpg']
-  },
-  // Add more sponsored offers as needed
-];
+    sponsoredOffer = [
+      {
+        'id': 1,
+        'name': 'Honda WR-V',
+        'description': 'Description de l\'offre sponsorisée pour Honda WR-V',
+        'images': [
+          'https://imgd-ct.aeplcdn.com/664x374/n/cw/ec/134205/new-wr-v-right-front-three-quarter.jpeg?isig=0&q=80'
+        ]
+      },
+      {
+        'id': 2,
+        'name': 'Honda CVr Indonesia',
+        'description':
+            'Description de l\'offre sponsorisée pour Honda CVr Indonesia',
+        'images': [
+          'https://paultan.org/image/2023/07/2023_Honda_WRV_V_Launch_Malaysia_Ext-2-BM-850x567.jpg'
+        ]
+      },
+      // Add more sponsored offers as needed
+    ];
 
-yesterdayOffer = [
-  {
-    'id': 1,
-    'name': 'Lexus WR-V',
-    'description': 'Description de l\'offre d\'hier pour Lexus WR-V',
-    'images': ['https://imgd-ct.aeplcdn.com/664x374/n/cw/ec/134205/new-wr-v-right-front-three-quarter.jpeg?isig=0&q=80']
-  },
-  {
-    'id': 2,
-    'name': 'Honda CVr Indonesia',
-    'description': 'Description de l\'offre d\'hier pour Honda CVr Indonesia',
-    'images': ['https://paultan.org/image/2023/07/2023_Honda_WRV_V_Launch_Malaysia_Ext-2-BM-850x567.jpg']
-  },
-  // Add more yesterday offers as needed
-];
+    yesterdayOffer = [
+      {
+        'id': 1,
+        'name': 'Lexus WR-V',
+        'description': 'Description de l\'offre d\'hier pour Lexus WR-V',
+        'images': [
+          'https://imgd-ct.aeplcdn.com/664x374/n/cw/ec/134205/new-wr-v-right-front-three-quarter.jpeg?isig=0&q=80'
+        ]
+      },
+      {
+        'id': 2,
+        'name': 'Honda CVr Indonesia',
+        'description':
+            'Description de l\'offre d\'hier pour Honda CVr Indonesia',
+        'images': [
+          'https://paultan.org/image/2023/07/2023_Honda_WRV_V_Launch_Malaysia_Ext-2-BM-850x567.jpg'
+        ]
+      },
+      // Add more yesterday offers as needed
+    ];
 
-/*     allOffers = responseExploited['all'];
+    /*allOffers = responseExploited['all'];
     recentOffers = responseExploited['recent'];
     sponsoredOffer = responseExploited['sponsored'];
     yesterdayOffer = responseExploited['yesterday']; */
@@ -262,53 +286,20 @@ yesterdayOffer = [
     );
   }
 
-  void _showSubcategoriesDialog(
-      BuildContext context, var my_id, List<String> subcategories) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return StatefulBuilder(
-            builder: (BuildContext context, StateSetter setState) {
-          return AlertDialog(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8.0),
-            ),
-            content: SingleChildScrollView(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: subcategories
-                    .map(
-                      (subcategory) => Column(
-                        children: [
-                          ListTile(
-                            title: Text(subcategory),
-                            tileColor: Colors.transparent, // Add a tile color
-                            onTap: () {
-                              setState(() {
-                                isSelected = true;
-                                SelectedSubCat = subcategory;
-                              });
+  void _showSubcategoriesDialog(BuildContext context, var my_id,
+      List<String> subcategories, subcategory) {
+    setState(() {
+      isSelected = true;
+      SelectedSubCat = subcategory;
+    });
 
-                              currentIndexProvider.updateCategoryLabel(
-                                  my_id, SelectedSubCat);
-                              Navigator.of(context).pop();
-                              print('Selected subcategory: $SelectedSubCat');
-                            },
-                          ),
-                          const Divider(
-                            color: Color.fromARGB(255, 231, 230, 230),
-                            height: 20,
-                          ),
-                        ],
-                      ),
-                    )
-                    .toList(),
-              ),
-            ),
-          );
-        });
-      },
-    );
+    currentIndexProvider.updateCategoryLabel(my_id, SelectedSubCat);
+    //Navigator.of(context).pop();
+    //navigatorKey.currentState?.pop();
+
+    if (kDebugMode) {
+      print('Selected subcategory: $SelectedSubCat');
+    }
   }
 
   void toggleRebuildFlag() {
@@ -359,7 +350,7 @@ yesterdayOffer = [
           Row(
             children: [
               Image.asset(
-               'assets/images/agrimarket.png',
+                'assets/images/agrimarket.png',
                 width: 60, // Set the desired width
                 height: 60, // Set the desired height
               ),
@@ -553,10 +544,11 @@ class CategoryButtons extends StatefulWidget {
   final int selectedCategoryId;
   final Map<int, GlobalKey> containerKeys;
   // final Map<int, double> categoryWidths;
-  final Function(BuildContext, dynamic, List<String>) showSubcategoriesDialog;
+  final Function(BuildContext, dynamic, List<String>, dynamic)
+      showSubcategoriesDialog;
   final currentIndexProvider;
 
-  CategoryButtons({
+  const CategoryButtons({
     required this.category,
     required this.homecontext,
     required this.selectedCategoryId,
@@ -567,6 +559,7 @@ class CategoryButtons extends StatefulWidget {
   });
 
   @override
+  // ignore: library_private_types_in_public_api
   _CategoryButtonsState createState() => _CategoryButtonsState();
 }
 
@@ -597,8 +590,15 @@ class _CategoryButtonsState extends State<CategoryButtons> {
               child: InkWell(
                 onTap: () {
                   // Show subcategories when a category is tapped
-                  widget.showSubcategoriesDialog(
-                      context, item['id'], item['subcategories']);
+
+                  UtilsClass.showActivityPickerBottomSheet(
+                    context,
+                    item['subcategories'],
+                    (subcategorySelected) {
+                      widget.showSubcategoriesDialog(context, item['id'],
+                          item['subcategories'], subcategorySelected);
+                    },
+                  );
 
                   setState(() {
                     isSelected = true;
@@ -607,8 +607,10 @@ class _CategoryButtonsState extends State<CategoryButtons> {
                   widget.currentIndexProvider
                       .setSimpleProviderValue(item['id']);
 
-                  print(
-                      'Selected cat : ${widget.currentIndexProvider.myselectedCategoryId}');
+                  if (kDebugMode) {
+                    print(
+                        'Selected cat : ${widget.currentIndexProvider.myselectedCategoryId}');
+                  }
                 },
                 child: Column(
                   children: [
@@ -682,13 +684,7 @@ class AnnoncesList extends StatelessWidget {
               imageUrl: item['images'][0],
               title: item['name'],
               description: item['description'],
-              keywords: [
-                "Auto",
-                "Moto",
-                "Zem",
-                "achat",
-                "voiture"
-              ],
+              keywords: ["Auto", "Moto", "Zem", "achat", "voiture"],
               borderRadius: BorderRadius.circular(8),
             ),
           ),

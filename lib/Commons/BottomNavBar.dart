@@ -32,8 +32,12 @@ class BottomNavBar extends StatelessWidget {
           index: 3,
         ),
         _buildNavItem(
-          icon: Icons.account_circle_outlined,
+          icon: Icons.search_rounded,
           index: 4,
+        ),
+        _buildNavItem(
+          icon: Icons.account_circle_outlined,
+          index: 5,
         ),
       ],
     );

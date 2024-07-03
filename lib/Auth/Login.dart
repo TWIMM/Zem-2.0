@@ -236,7 +236,7 @@ class _LoginPageState extends State<LoginPage> {
                                     ),
                                   )),
                               onTap: () {
-                                validator.loginValidator(
+                                validator.loginValidatorWithoutApi(
                                   _formKey,
                                   emailController,
                                   passwordController,

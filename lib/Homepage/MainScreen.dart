@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:agri_market/Homepage/ListOfferBy.dart';
 import 'package:agri_market/Commons/custom_text.dart';
+import 'package:agri_market/Homepage/Displayer.dart';
 
 void main() {
   runApp(MyApp());
@@ -35,6 +36,7 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   final List<GlobalKey<NavigatorState>> _navigatorKeys = [
+    GlobalKey<NavigatorState>(),
     GlobalKey<NavigatorState>(),
     GlobalKey<NavigatorState>(),
     GlobalKey<NavigatorState>(),
@@ -144,7 +146,7 @@ class _MainScreenState extends State<MainScreen> {
               _buildOffstageNavigator(2),
               _buildOffstageNavigator(3),
               _buildOffstageNavigator(4),
-              // _buildOffstageNavigator(5),
+              _buildOffstageNavigator(5),
             ],
           ),
           //  bottomNavigationBar: bottomNavBar,
@@ -161,6 +163,8 @@ class _MainScreenState extends State<MainScreen> {
           Messages(),
           Add(),
           MesProduits(),
+          Displayer(),
+
           Profile(),
           // ChatDetailPageWrapper()
         ].elementAt(index);

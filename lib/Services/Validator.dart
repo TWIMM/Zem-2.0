@@ -699,4 +699,94 @@ class Validator {
       }
     }
   }
+
+  void loginValidatorWithoutApi(
+    GlobalKey<FormState> formKey,
+    TextEditingController emailValue,
+    TextEditingController passwordValue,
+    Function(bool) setEmailError,
+    Function(bool) setPasswordError,
+    BuildContext context,
+    IconData CustomIcones1,
+    IconData CustomIcones2,
+  ) {
+    if (formKey.currentState!.validate()) {
+      String email = emailValue.text;
+      String password = passwordValue.text;
+
+      if (email.isEmpty || password.isEmpty) {
+        setEmailError(true);
+        setPasswordError(true);
+        CustomAlert.showalert(context, 'Aucun champs vide !', CustomIcones1);
+      } else {
+        setEmailError(false);
+        setPasswordError(false);
+
+        // Simulate successful login (remove actual API call)
+        // Example data to set (replace with your actual structure):
+        Map<String, dynamic> responseJson = {
+          'error': false,
+          'data': {
+            'jwtAuthentification': {'token': 'dummy_token'},
+            '_id': 'user_id',
+            'firstName': 'John',
+            'lastName': 'Doe',
+            'accountType': 'user',
+            'phoneNumber': '+1234567890',
+            'email': 'john.doe@example.com',
+            'company': {
+              'name': 'Example Company',
+              'registerNumber': '1234567890'
+            },
+            'info': {
+              'country': 'Country',
+              'codeZip': '12345',
+              'adress': 'Address'
+            }
+          }
+        };
+
+        // Handle the response
+        if (responseJson['error'] == false) {
+          var currentIndexProvider = context.read<CurrentIndexProvider>();
+
+          // Ensure each nested property is not null before accessing
+          currentIndexProvider.setAccountDetail('authToken',
+              responseJson['data']?['jwtAuthentification']?['token'] ?? '');
+          currentIndexProvider.setAccountDetail(
+              '_id', responseJson['data']?['_id'] ?? '');
+          currentIndexProvider.setAccountDetail('user_name',
+              "${responseJson['data']?['firstName'] ?? ''} ${responseJson['data']?['lastName'] ?? ''}");
+          currentIndexProvider.setAccountDetail(
+              'account_type', responseJson['data']?['accountType'] ?? '');
+          currentIndexProvider.setAccountDetail(
+              'phone_number', responseJson['data']?['phoneNumber'] ?? '');
+          currentIndexProvider.setAccountDetail(
+              'user_email', responseJson['data']?['email'] ?? '');
+          currentIndexProvider.setAccountDetail(
+              'company_name', responseJson['data']?['company']?['name'] ?? '');
+          currentIndexProvider.setAccountDetail(
+              'country', responseJson['data']?['info']?['country'] ?? '');
+          currentIndexProvider.setAccountDetail(
+              'activity', responseJson['data']?['company']?['activity'] ?? '');
+          currentIndexProvider.setAccountDetail(
+              'codeZip', responseJson['data']?['info']?['codeZip'] ?? '');
+          currentIndexProvider.setAccountDetail('register_number',
+              responseJson['data']?['company']?['registerNumber'] ?? '');
+          currentIndexProvider.setAccountDetail('adress',
+              "${responseJson['data']?['info']?['codeZip'] ?? ''}, ${responseJson['data']?['info']?['adress'] ?? ''}, ${responseJson['data']?['info']?['country'] ?? ''}");
+
+          // Navigate to MainScreen after setting account details
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const MainScreen()),
+          );
+        } else {
+          // Handle error scenario if needed
+          CustomAlert.showalert(
+              context, 'Error occurred during login', CustomIcones1);
+        }
+      }
+    }
+  }
 }

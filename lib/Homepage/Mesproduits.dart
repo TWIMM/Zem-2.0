@@ -67,7 +67,7 @@ class MesProduitsState extends State<MesProduits> {
           ),
         )),
         bottomNavigationBar: BottomNavBar(
-          currentIndex: 1,
+          currentIndex: 3,
           onTabTapped: (index) {
             context.read<CurrentIndexProvider>().setIndex(index);
           },
