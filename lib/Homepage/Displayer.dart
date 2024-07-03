@@ -1,4 +1,5 @@
 import 'package:agri_market/Homepage/google_maps_screen.dart';
+import 'package:agri_market/Utils/get_places.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:agri_market/Commons/BottomNavBar.dart';
@@ -11,6 +12,7 @@ import 'package:location/location.dart';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import '../Commons/AuthInputModel.dart';
 import 'package:agri_market/Utils/UtilsClass.dart';
+import 'package:agri_market/Services/gmaps_service.dart';
 
 class Displayer extends StatefulWidget {
   const Displayer({Key? key}) : super(key: key);
@@ -22,7 +24,7 @@ class Displayer extends StatefulWidget {
 class _MyAppState extends State<Displayer> {
   TextEditingController searchController = TextEditingController();
   bool showCurrentPositionButton = true;
-
+  GetPlaces getPlaces = GetPlaces();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -112,11 +114,12 @@ class _MyAppState extends State<Displayer> {
               visible: searchController.text.isNotEmpty ? true : false,
               child: Expanded(
                 child: ListView.builder(
-                  itemCount: 5,
+                  itemCount: getPlaces.predictions?.length ?? 0,
                   itemBuilder: (context, index) {
-                    return const ListTile(
-                      title: Text('Adresse'),
-                      leading: Icon(Icons.location_on),
+                    return ListTile(
+                      title: Text(
+                          getPlaces.predictions![index].description.toString()),
+                      leading: const Icon(Icons.location_on),
                     );
                   },
                 ),
@@ -149,6 +152,12 @@ class _MyAppState extends State<Displayer> {
       onChanged: (value) {
         setState(() {
           showCurrentPositionButton = value.isEmpty;
+        });
+
+        GmapsService.getPlaces(searchController.text.toString()).then((value) {
+          setState(() {
+            getPlaces = value;
+          });
         });
       },
     );
