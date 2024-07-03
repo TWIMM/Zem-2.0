@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
 class CustomInputField extends StatelessWidget {
   final TextEditingController controller;
   final onChanged;
@@ -139,6 +140,7 @@ class CustomSearch extends StatefulWidget {
   bool isError;
   final List<DropdownMenuItem<String>>? dropdownItems;
   final String? dropdownValue;
+  final Function(String)? onChanged;
   final Function(String?)? dropdownOnChanged;
 
   CustomSearch({
@@ -164,6 +166,7 @@ class CustomSearch extends StatefulWidget {
     this.dropdownItems,
     this.dropdownValue,
     this.dropdownOnChanged,
+    this.onChanged,
     this.isError = false,
   }) : super(key: key);
 
@@ -202,13 +205,7 @@ class _CustomInputFieldState extends State<CustomSearch> {
             ),
           TextFormField(
             controller: widget.controller,
-            onChanged: (text) {
-              if (widget.validator != null) {
-                setState(() {
-                  widget.isError = widget.validator!(text) != null;
-                });
-              }
-            },
+            onChanged: widget.onChanged!(widget.controller.text),
 
             enabled: widget.enabled,
             style: widget.textStyle ?? TextStyle(color: Colors.black),
