@@ -42,7 +42,7 @@ class _MyAppState extends State<Displayer> {
         body: Center(
             child: Column(children: [
           _buildSearchBar(),
-          SizedBox(
+          const SizedBox(
             height: 15,
           ),
           GestureDetector(
@@ -73,18 +73,19 @@ class _MyAppState extends State<Displayer> {
                   // Use the provided color code
                   borderRadius: BorderRadius.circular(12.0),
                 ),
-                child: const Center(
+                child: Center(
                     child: Row(children: [
-                  Icon(
+                  const Icon(
                     Icons.add_location_rounded,
                     size: 30.0,
                     color: Colors.white,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 9,
                   ),
                   Visibility(
-                    child: StyledText(
+                    visible: searchController.text.isEmpty ? true : false,
+                    child: const StyledText(
                       text: 'Position actuelle',
                       fontName: "Open Sans",
                       fontSize: 16,
@@ -92,9 +93,20 @@ class _MyAppState extends State<Displayer> {
                       color: Colors.white,
                       textAlign: TextAlign.center,
                     ),
-                  )
+                  ),
                 ]))),
           ),
+          Visibility(
+              visible: searchController.text.isEmpty ? false : true,
+              child: Expanded(
+                child: ListView.builder(
+                    itemCount: 5,
+                    itemBuilder: (context, index) {
+                      return ListTile(
+                          title: Text('Adresse'),
+                          leading: Icon(Icons.location_on));
+                    }),
+              ))
         ])),
         bottomNavigationBar: BottomNavBar(
           currentIndex: 4,
