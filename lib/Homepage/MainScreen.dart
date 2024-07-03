@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 import 'package:agri_market/Commons/BottomNavBar.dart';
+import 'package:agri_market/Homepage/google_maps_screen.dart';
 import 'package:agri_market/provider/BottomProvider.dart';
 import 'package:agri_market/Homepage/Chat.dart';
 import 'package:agri_market/Homepage/Messages.dart';
@@ -23,6 +24,37 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false, // Remove the debug banner
       home: MainScreen(),
+      onGenerateRoute: (settings) {
+        // Handle unknown routes here
+        return MaterialPageRoute(
+          builder: (context) => Scaffold(
+            appBar: AppBar(
+              iconTheme: const IconThemeData(
+                color: Colors.black,
+              ),
+              elevation: 0,
+              backgroundColor: const Color(0xFFF5F5F8),
+              toolbarHeight: 90,
+              title: const StyledText(
+                text: 'Page introuvable',
+                fontName: "Open Sans",
+                fontSize: 17,
+                fontWeight: FontWeight.w600,
+                color: Colors.black,
+              ),
+            ),
+            body: Center(
+              child: Text('404 - Not Found'),
+            ),
+          ),
+        );
+      },
+      routes: {
+        // Define your other routes here if needed
+        '/chat_detail': (context) => ChatDetailPageWrapper(),
+        '/listofferby': (context) => ListOfferByWidget(),
+        '/search_place': (context) => Displayer(),
+      },
     );
   }
 }
@@ -41,7 +73,7 @@ class _MainScreenState extends State<MainScreen> {
     GlobalKey<NavigatorState>(),
     GlobalKey<NavigatorState>(),
     GlobalKey<NavigatorState>(),
-    GlobalKey<NavigatorState>()
+    GlobalKey<NavigatorState>(),
   ];
 
   @override
@@ -77,117 +109,69 @@ class _MainScreenState extends State<MainScreen> {
         appBarTitle2 = 'les plus récentes';
         break;
     }
-    Widget? bottomNavBar;
-    PreferredSizeWidget? appBar;
 
-    bottomNavBar = BottomNavBar(
-      currentIndex: currentIndex,
-      onTabTapped: (index) {
-        context.read<CurrentIndexProvider>().setIndex(index);
-      },
-    );
-    appBar = AppBar(
-      iconTheme: IconThemeData(
-        color: Colors.black,
-      ),
-      elevation: 0,
-      backgroundColor: Color(0xFFF5F5F8),
-      toolbarHeight: 90,
-      title: Column(
-        children: [
-          StyledText(
-            text: appBarTitle1,
-            fontName: "Open Sans",
-            fontSize: 17,
-            fontWeight: FontWeight.w600,
-            color: Colors.black,
-          ),
-          StyledText(
-            text: appBarTitle2,
-            fontName: "Open Sans",
-            fontSize: 17,
-            fontWeight: FontWeight.w600,
-            color: Colors.black,
-          ),
-        ],
-      ),
-      actions: [
-        Row(
-          children: [
-            Image.asset(
-              'assets/icons/pp.png',
-              width: 60, // Set the desired width
-              height: 60, // Set the desired height
-            ),
-            SizedBox(
-              width: 5,
-            ),
-          ],
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: Stack(
+        children: List.generate(
+          _navigatorKeys.length,
+          (index) => _buildOffstageNavigator(index, currentIndex),
         ),
-      ],
+      ),
     );
-
-    print("Current Route: $currentIndex");
-
-    return WillPopScope(
-        onWillPop: () async {
-          final isFirstRouteInCurrentTab =
-              !await _navigatorKeys[currentIndex].currentState!.maybePop();
-
-          // let the system handle the back button if we're on the first route
-          return isFirstRouteInCurrentTab;
-        },
-        child: Scaffold(
-          backgroundColor: Colors.white,
-          body: Stack(
-            children: [
-              _buildOffstageNavigator(0),
-              _buildOffstageNavigator(1),
-              _buildOffstageNavigator(2),
-              _buildOffstageNavigator(3),
-              _buildOffstageNavigator(4),
-              _buildOffstageNavigator(5),
-            ],
-          ),
-          //  bottomNavigationBar: bottomNavBar,
-        ));
   }
 
-  Map<String, WidgetBuilder> _routeBuilders(BuildContext context, int index) {
-    final authToken =
-        context.watch<CurrentIndexProvider>().getAccountDetail('authToken');
-    return {
-      '/': (context) {
-        return [
-          Home(),
-          Messages(),
-          Add(),
-          MesProduits(),
-          Displayer(),
-
-          Profile(),
-          // ChatDetailPageWrapper()
-        ].elementAt(index);
-      },
-      '/chat_detail': (context) => ChatDetailPageWrapper(),
-      '/listofferby': (context) => ListOfferByWidget(),
-    };
-  }
-
-  Widget _buildOffstageNavigator(int index) {
+  Widget _buildOffstageNavigator(int index, int currentIndex) {
     var routeBuilders = _routeBuilders(context, index);
-    final currentIndex = context.watch<CurrentIndexProvider>().currentIndex;
-
     return Offstage(
       offstage: currentIndex != index,
       child: Navigator(
         key: _navigatorKeys[index],
         onGenerateRoute: (routeSettings) {
+          final routeName = routeSettings.name;
+          WidgetBuilder? builder = routeBuilders[routeName];
           return MaterialPageRoute(
-            builder: (context) => routeBuilders[routeSettings.name]!(context),
+            builder: (context) => builder!(context),
           );
         },
       ),
     );
+  }
+
+  Map<String, WidgetBuilder> _routeBuilders(BuildContext context, int index) {
+    switch (index) {
+      case 0:
+        return {
+          '/': (context) => Home(),
+          '/chat_detail': (context) => ChatDetailPageWrapper(),
+          '/listofferby': (context) => ListOfferByWidget(),
+          '/search_place': (context) => Displayer(),
+        };
+      case 1:
+        return {
+          '/': (context) => Messages(),
+          '/chat_detail': (context) => ChatDetailPageWrapper(),
+        };
+      case 2:
+        return {
+          '/': (context) => Add(),
+        };
+      case 3:
+        return {
+          '/': (context) => MesProduits(),
+        };
+      case 4:
+        return {
+          '/': (context) => Displayer(),
+        };
+      case 5:
+        return {
+          '/': (context) => Profile(),
+        };
+      default:
+        return {
+        
+        };
+    }
   }
 }

@@ -12,8 +12,6 @@ import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import '../Commons/AuthInputModel.dart';
 import 'package:agri_market/Utils/UtilsClass.dart';
 
-void main() => runApp(const Displayer());
-
 class Displayer extends StatefulWidget {
   const Displayer({Key? key}) : super(key: key);
 

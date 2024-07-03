@@ -28,13 +28,13 @@ class _MessagesState extends State<Messages> {
     double deviceWidth = MediaQuery.of(context).size.width;
     return Scaffold(
         appBar: AppBar(
-            iconTheme: IconThemeData(
+            iconTheme: const IconThemeData(
               color: Colors.black,
             ),
             elevation: 0,
-            backgroundColor: Color(0xFFF5F5F8),
+            backgroundColor: const Color(0xFFF5F5F8),
             toolbarHeight: 90,
-            title: StyledText(
+            title: const StyledText(
               text: 'Messages',
               fontName: "Open Sans",
               fontSize: 17,
@@ -43,19 +43,19 @@ class _MessagesState extends State<Messages> {
             )),
         body: Column(
           children: [
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             CustomSearch(
                 controller: searchController,
                 labelText: "Rechercher",
-                prefixIcon: Icon(
+                prefixIcon: const Icon(
                   Icons.search,
                   color: Color(0xFFFFB405),
                 ),
-                fillColor: Color.fromARGB(255, 234, 234, 234),
+                fillColor: const Color.fromARGB(255, 234, 234, 234),
                 width: deviceWidth * 0.9,
                 height: 51,
                 onChanged: (ValueKey) {}),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Container(
               alignment: Alignment.center,
               child: GestureDetector(
@@ -69,7 +69,7 @@ class _MessagesState extends State<Messages> {
                 ),
               ),
             ),
-            SizedBox(height: 1),
+            const SizedBox(height: 1),
             Container(
               alignment: Alignment.center,
               child: messageAlert(

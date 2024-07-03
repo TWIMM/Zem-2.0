@@ -3,6 +3,8 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:agri_market/Commons/custom_text.dart';
 import 'package:agri_market/Services/gmaps_service.dart';
 import 'package:agri_market/Utils/place_from_coordinates.dart';
+import 'package:page_transition/page_transition.dart';
+import 'package:agri_market/Homepage/Displayer.dart';
 
 class GMapsApp extends StatelessWidget {
   final double defaultLong;
@@ -26,10 +28,10 @@ class GMapsApp extends StatelessWidget {
 }
 
 class GMapsScreen extends StatefulWidget {
-  final double defaultLong;
-  final double defaultLat;
+  double defaultLong;
+  double defaultLat;
 
-  const GMapsScreen({
+  GMapsScreen({
     Key? key,
     required this.defaultLong,
     required this.defaultLat,
@@ -42,15 +44,35 @@ class GMapsScreen extends StatefulWidget {
 class _GMapsScreenState extends State<GMapsScreen> {
   late GoogleMapController mapController;
   late PlaceFromCoordinates placeFromCoordinates;
+  bool isLoading = false;
 
   @override
   void initState() {
     super.initState();
     placeFromCoordinates = PlaceFromCoordinates();
+    setState(() {
+      isLoading = true;
+    });
+    GmapsService.placeFromCoordinates(
+      widget.defaultLat,
+      widget.defaultLong,
+    ).then((value) {
+      setState(() {
+        placeFromCoordinates = value;
+        isLoading = false;
+      });
+    });
   }
 
   void _onMapCreated(GoogleMapController controller) {
     mapController = controller;
+  }
+
+  void updateLocation(double lat, double lng) {
+    setState(() {
+      widget.defaultLat = lat;
+      widget.defaultLong = lng;
+    });
   }
 
   @override
@@ -64,22 +86,36 @@ class _GMapsScreenState extends State<GMapsScreen> {
         backgroundColor: const Color(0xFFF5F5F8),
         toolbarHeight: 90,
         title: const StyledText(
-          text: 'Nos agences',
+          text: 'Agences proches de vous',
           fontName: "Open Sans",
           fontSize: 17,
           fontWeight: FontWeight.w600,
           color: Colors.black,
         ),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.black, size: 15),
+          onPressed: () {
+            // Handle back button press
+            Navigator.push(
+              context,
+              PageTransition(
+                  type: PageTransitionType.leftToRight, child: Displayer()),
+            );
+          },
+        ),
       ),
       body: GoogleMap(
         onCameraIdle: () {
-          print('Flutter');
+          setState(() {
+            isLoading = true;
+          });
           GmapsService.placeFromCoordinates(
             widget.defaultLat,
             widget.defaultLong,
           ).then((value) {
             setState(() {
               placeFromCoordinates = value;
+              isLoading = false;
             });
           });
         },
@@ -90,8 +126,8 @@ class _GMapsScreenState extends State<GMapsScreen> {
         ),
         onCameraMove: (CameraPosition positionCam) {
           print('Location  : ${positionCam.toString()}');
-          // No need to setState for widget.defaultLat and widget.defaultLong
-          // These values are immutable once set
+          updateLocation(
+              positionCam.target.latitude, positionCam.target.longitude);
         },
       ),
       bottomSheet: Container(
