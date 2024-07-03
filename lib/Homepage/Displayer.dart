@@ -83,14 +83,16 @@ class _MyAppState extends State<Displayer> {
                   SizedBox(
                     width: 9,
                   ),
-                  StyledText(
-                    text: 'Position actuelle',
-                    fontName: "Open Sans",
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                    color: Colors.white,
-                    textAlign: TextAlign.center,
-                  ),
+                  Visibility(
+                    child: StyledText(
+                      text: 'Position actuelle',
+                      fontName: "Open Sans",
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.white,
+                      textAlign: TextAlign.center,
+                    ),
+                  )
                 ]))),
           ),
         ])),
